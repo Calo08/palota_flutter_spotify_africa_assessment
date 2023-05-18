@@ -8,4 +8,15 @@ class SpotifyPlaylist extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container();
   }
+  Future<List<Category>?> getPlaylist(String json) async {
+    var client = http.Client();
+
+    var uri = Uri.parse(
+        'https://api.spotify.com/v1/playlists/3cEYpjA9oz9GiPac4AsH4n');
+    var response = await client.get(uri);
+    if (response.statusCode == 200) {
+      var json = response.body;
+      return getPlaylist(json);
+    }
+  }
 }
