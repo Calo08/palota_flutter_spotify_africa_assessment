@@ -4,48 +4,61 @@ import 'package:flutter_spotify_africa_assessment/routes.dart';
 
 // TODO: fetch and populate playlist info and allow for click-through to detail
 // Feel free to change this to a stateful widget if necessary
-class SpotifyCategory extends StatelessWidget {
-  final String categoryId;
+import 'dart:convert';
 
-  const SpotifyCategory({
-    Key? key,
-    required this.categoryId,
-  }) : super(key: key);
+Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("{CategoryName}"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline),
-            onPressed: () => Navigator.of(context).pushNamed(AppRoutes.about),
-          ),
-        ],
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: <Color>[
-                AppColors.blue,
-                AppColors.cyan,
-                AppColors.green,
-              ],
-            ),
-          ),
-        ),
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: Text(
-            '''Populate with playlist info for category '$categoryId', click on playlist to view playlist detail''',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
+String welcomeToJson(Welcome data) => json.encode(data.toJson());
+
+class Welcome {
+    String href;
+    List<Icon> icons;
+    String id;
+    String name;
+
+    Welcome({
+        required this.href,
+        required this.icons,
+        required this.id,
+        required this.name,
+    });
+
+    factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
+        href: json["href"],
+        icons: List<Icon>.from(json["icons"].map((x) => Icon.fromJson(x))),
+        id: json["id"],
+        name: json["name"],
     );
-  }
+
+    Map<String, dynamic> toJson() => {
+        "href": href,
+        "icons": List<dynamic>.from(icons.map((x) => x.toJson())),
+        "id": id,
+        "name": name,
+    };
 }
+
+class Icon {
+    String url;
+    dynamic height;
+    dynamic width;
+
+    Icon({
+        required this.url,
+        this.height,
+        this.width,
+    });
+
+    factory Icon.fromJson(Map<String, dynamic> json) => Icon(
+        url: json["url"],
+        height: json["height"],
+        width: json["width"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "url": url,
+        "height": height,
+        "width": width,
+    };
+}
+
